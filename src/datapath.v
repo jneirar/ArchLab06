@@ -6,6 +6,12 @@
 // it is composed of instances of its sub-modules. For example,
 // the instruction register is instantiated as a 32-bit flopenr.
 // The other submodules are likewise instantiated. 
+`include "mux2.v"
+`include "mux3.v"
+`include "regfile.v"
+`include "extend.v"
+`include "alu.v"
+
 module datapath (
 	clk,
 	reset,
@@ -64,6 +70,106 @@ module datapath (
 	// (Address Mux), etc. so that your code is easier to understand.
 
 	// ADD CODE HERE
+	flopenr #(32) pcreg(
+		.clk(clk),
+		.reset(reset),
+		.en(PCWrite),
+		.d(Result),
+		.q(PC)
+	);
+	mux2 #(32) pcmux(
+		.d0(PC),
+		.d1(Result),
+		.s(AdrSrc),
+		.y(Adr)
+	);
+	flopenr #(32) instrreg(
+		.clk(clk),
+		.reset(reset),
+		.en(IRWrite),
+		.d(ReadData),
+		.q(Instr)
+	);
+	flopr #(32) datareg(
+		.clk(clk),
+		.reset(reset),
+		.d(ReadData),
+		.q(Data)
+	);
+	mux2 #(4) ra1mux(
+		.d0(Instr[19:16]),
+		.d1(4'b1111),
+		.s(RegSrc[0]),
+		.y(RA1)
+	);
+	mux2 #(4) ra2mux(
+		.d0(Instr[3:0]),
+		.d1(Instr[15:12]),
+		.s(RegSrc[1]),
+		.y(RA2)
+	);
+	regfile rf(
+		.clk(clk),
+		.we3(RegWrite),
+		.ra1(RA1),
+		.ra2(RA2),
+		.wa3(Instr[15:12]),
+		.wd3(Result),
+		.r15(Result),
+		.rd1(RD1),
+		.rd2(RD2)
+	);
+	extend ext(
+		.Instr(Instr[23:0]),
+		.ImmSrc(ImmSrc),
+		.ExtImm(ExtImm)
+	);
+	flopr #(32) rd1reg(
+		.clk(clk),
+		.reset(reset),
+		.d(RD1),
+		.q(A)
+	);
+	flopr #(32) rd2reg(
+		.clk(clk),
+		.reset(reset),
+		.d(RD2),
+		.q(WriteData)
+	);
+	mux3 #(32) srcAmux(
+		.d0(A),
+		.d1(PC),
+		.d2(ALUOut),
+		.s(ALUSrcA),
+		.y(SrcA)
+	);
+	mux3 #(32) srcBmux(
+		.d0(WriteData),
+		.d1(ExtImm),
+		.d2(32'b100),
+		.s(ALUSrcA),
+		.y(SrcB)
+	);
+	alu alu(
+		.a(SrcA),
+		.b(SrcB),
+		.ALUControl(ALUControl),
+		.Result(ALUResult),
+		.ALUFlags(ALUFlags)
+	);
+	flopr #(32) aluoutreg(
+		.clk(clk),
+		.reset(reset),
+		.d(ALUResult),
+		.q(ALUOut)
+	);
+	mux3 #(32) aluoutmux(
+		.d0(ALUOut),
+		.d1(Data),
+		.d2(ALUResult),
+		.s(ResultSrc),
+		.y(Result)
+	);
 endmodule
 
 // ADD CODE BELOW

@@ -1,8 +1,6 @@
 // ADD CODE BELOW
 // Add code for the condlogic and condcheck modules. Remember, you may
 // reuse code from prior labs.
-`include "flopenr.v"
-`include "flopr.v"
 `include "condcheck.v"
 
 module condlogic (

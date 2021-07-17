@@ -1,6 +1,7 @@
 `include "controller.v"
-`include "datapath"
-
+`include "datapath.v"
+`include "flopenr.v"
+`include "flopr.v"
 module arm (
 	clk,
 	reset,
