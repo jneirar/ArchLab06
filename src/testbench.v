@@ -4,6 +4,7 @@ module testbench;
 	wire [31:0] WriteData;
 	wire [31:0] Adr;
 	wire MemWrite;
+	reg [31:0] cycle;
 	arm_multi dut(
 		.clk(clk),
 		.reset(reset),
@@ -13,11 +14,14 @@ module testbench;
 	);
 	initial begin
 		reset <= 1;
+		cycle = 1;
 		#(22)
 			;
 		reset <= 0;
 	end
 	always begin
+		if (~reset)
+			cycle = cycle + 1;
 		clk <= 1;
 		#(5)
 			;

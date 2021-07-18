@@ -29,7 +29,7 @@ module alu(
   assign zero = (Result == 32'b0); 
   assign carry = (ALUControl[1]==1'b0) & sum[32];
   assign overflow = (ALUControl[1]==1'b0) & (sum[31] 
-	^ a[31])  & (ALUControl[0] ^ a[31] ^ b[31]);
+	^ a[31])  & ~(ALUControl[0] ^ a[31] ^ b[31]);
   
   assign ALUFlags= {neg, zero, carry, overflow};
   

@@ -98,7 +98,7 @@ module mainfsm (
 			DECODE: controls 	= 13'b0000001001100;
 			EXECUTER: controls 	= 13'b0000001000001;
 			EXECUTEI: controls 	= 13'b0000001000011;
-			ALUWB: controls 	= 13'b0001000000011;
+			ALUWB: controls 	= 13'b0001000000010;
 			MEMADR: controls 	= 13'b0000001000010;
 			MEMREAD: controls 	= 13'b0000010000010;
 			MEMWRITE: controls 	= 13'b0010010000010;

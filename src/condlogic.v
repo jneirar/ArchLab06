@@ -33,14 +33,16 @@ module condlogic (
 	wire [3:0] Flags;
 	wire CondEx;
 	wire CondExReg;
-
+	
+	//assign FlagWrite = FlagW & {CondEx, CondEx};
+	assign FlagWrite = CondEx == 1 ? FlagW : 2'b00;
 	// Delay writing flags until ALUWB state
-	flopr #(2) flagwritereg(
+	/*flopr #(2) flagwritereg(
 		.clk(clk),
 		.reset(reset),
 		.d(FlagW & {2 {CondEx}}),
 		.q(FlagWrite)
-	);
+	);*/
 
 	// ADD CODE HERE
 	flopenr #(2) flagsreg0(
