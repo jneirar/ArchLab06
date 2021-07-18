@@ -147,7 +147,7 @@ module datapath (
 		.d0(WriteData),
 		.d1(ExtImm),
 		.d2(32'b100),
-		.s(ALUSrcA),
+		.s(ALUSrcB),
 		.y(SrcB)
 	);
 	alu alu(
